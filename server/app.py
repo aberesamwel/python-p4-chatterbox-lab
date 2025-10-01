@@ -43,7 +43,7 @@ def messages_by_id(id):
     elif request.method == 'DELETE':
         db.session.delete(message)
         db.session.commit()
-        return '', 204
+        return {}
 
 if __name__ == '__main__':
     app.run(port=5555)
