@@ -32,20 +32,20 @@ def messages():
 
 @app.route('/messages/<int:id>', methods=['PATCH', 'DELETE'])
 def messages_by_id(id):
-    message = Message.query.get_or_404(id)
+    message = db.session.get(Message, id)
+    if not message:
+        return '', 404
     
     if request.method == 'PATCH':
         data = request.get_json()
         message.body = data['body']
-        from datetime import datetime
-        message.updated_at = datetime.utcnow()
         db.session.commit()
         return jsonify(message.to_dict())
     
     elif request.method == 'DELETE':
         db.session.delete(message)
         db.session.commit()
-        return '', 200
+        return '', 204
 
 if __name__ == '__main__':
     app.run(port=5555)
