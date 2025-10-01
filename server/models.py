@@ -8,9 +8,12 @@ metadata = MetaData(naming_convention={
 
 db = SQLAlchemy(metadata=metadata)
 
-class SerializerMixin:
-    def to_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+try:
+    from sqlalchemy_serializer import SerializerMixin
+except ImportError:
+    class SerializerMixin:
+        def to_dict(self):
+            return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 class Message(db.Model, SerializerMixin):
     __tablename__ = 'messages'

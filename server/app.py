@@ -37,13 +37,15 @@ def messages_by_id(id):
     if request.method == 'PATCH':
         data = request.get_json()
         message.body = data['body']
+        from datetime import datetime
+        message.updated_at = datetime.utcnow()
         db.session.commit()
         return jsonify(message.to_dict())
     
     elif request.method == 'DELETE':
         db.session.delete(message)
         db.session.commit()
-        return {}
+        return '', 200
 
 if __name__ == '__main__':
     app.run(port=5555)
